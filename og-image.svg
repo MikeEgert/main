@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <g fill="#000000" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <text x="80" y="96" font-size="22" font-weight="400" letter-spacing="3">MEGERT</text>
+    <text x="1120" y="96" font-size="22" font-weight="400" letter-spacing="3" text-anchor="end">PORTFOLIO © 2026</text>
+    <text x="72" y="430" font-size="280" font-weight="700" letter-spacing="-14">MEGERT</text>
+    <text x="80" y="520" font-size="34" font-weight="400" letter-spacing="10" fill="#8a8a8a">DESIGNER &amp; DEVELOPER</text>
+  </g>
+  <line x1="0" y1="629" x2="1200" y2="629" stroke="#000000" stroke-width="2"/>
+</svg>
