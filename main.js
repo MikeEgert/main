@@ -26,3 +26,57 @@
     setTimeout(function () { window.location.href = link.href; }, 250);
   });
 })();
+
+// Landing: magnetic "More" button — the signature micro-interaction
+(function () {
+  var btn = document.querySelector("[data-magnetic]");
+  if (!btn) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(hover: hover)").matches) return;
+
+  var raf = null;
+  var tx = 0;
+  var ty = 0;
+
+  function apply() {
+    btn.style.transform = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px)";
+    raf = null;
+  }
+
+  btn.addEventListener("mousemove", function (e) {
+    var r = btn.getBoundingClientRect();
+    var mx = e.clientX - (r.left + r.width / 2);
+    var my = e.clientY - (r.top + r.height / 2);
+    tx = mx * 0.28;
+    ty = my * 0.5;
+    if (!raf) raf = requestAnimationFrame(apply);
+  });
+
+  btn.addEventListener("mouseleave", function () {
+    tx = 0;
+    ty = 0;
+    if (!raf) raf = requestAnimationFrame(apply);
+  });
+})();
+
+// Home: reveal sections as they scroll into view
+(function () {
+  var items = document.querySelectorAll(".reveal");
+  if (!items.length) return;
+
+  if (!("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    items.forEach(function (el) { el.classList.add("is-visible"); });
+    return;
+  }
+
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      io.unobserve(entry.target);
+    });
+  }, { rootMargin: "0px 0px -10% 0px", threshold: 0.1 });
+
+  items.forEach(function (el) { io.observe(el); });
+})();
