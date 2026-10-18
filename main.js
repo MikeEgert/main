@@ -4,7 +4,10 @@
   if (!els.length) return;
 
   function tick() {
-    var t = new Date().toLocaleTimeString("en-GB", { hour12: false });
+    var t = new Date().toLocaleTimeString("en-GB", {
+      hour12: false,
+      timeZone: "Europe/Tallinn"
+    });
     els.forEach(function (el) { el.textContent = t; });
   }
 
