@@ -523,8 +523,8 @@ a {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.025),
     0 8px 24px -10px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  transition: transform 0.35s var(--ease), border-color 0.3s ease,
-    box-shadow 0.35s var(--ease), background-color 0.3s ease;
+  transition: transform 0.15s var(--ease), border-color 0.12s ease-out,
+    box-shadow 0.15s var(--ease), background-color 0.12s ease-out;
 }
 
 /* Expanding left accent bar on hover */
@@ -538,7 +538,7 @@ a {
   background: var(--accent);
   transform: scaleY(0);
   transform-origin: bottom;
-  transition: transform 0.35s var(--ease);
+  transition: transform 0.15s var(--ease);
 }
 
 .work-card__top {
@@ -569,7 +569,7 @@ a.work-card {
   letter-spacing: -0.01em;
   color: var(--fg);
   line-height: 1.3;
-  transition: transform 0.35s var(--ease), color 0.25s ease;
+  transition: transform 0.15s var(--ease), color 0.12s ease-out;
 }
 
 .work-card__desc {
@@ -590,7 +590,7 @@ a.work-card {
   object-fit: contain;
   flex-shrink: 0;
   opacity: 0.78;
-  transition: transform 0.35s var(--ease), opacity 0.25s ease;
+  transition: transform 0.15s var(--ease), opacity 0.12s ease-out;
 }
 
 .work-card__tags {
@@ -609,32 +609,32 @@ a.work-card {
   border-radius: 3px;
   padding: 4px 10px;
   line-height: 1.3;
-  transition: transform 0.25s var(--ease), border-color 0.2s ease,
-    color 0.2s ease, background-color 0.2s ease;
+  transition: border-color 0.12s ease-out,
+    color 0.12s ease-out, background-color 0.12s ease-out;
 }
 
-.work-card:hover {
+a.work-card[href]:hover {
   transform: translateY(-3px);
   border-color: #c8c7c2;
   box-shadow: 0 14px 32px -12px rgba(0, 0, 0, 0.09);
 }
 
-.work-card:hover::before {
+a.work-card[href]:hover::before {
   transform: scaleY(1);
   transform-origin: top;
 }
 
-.work-card:hover .work-card__title {
+a.work-card[href]:hover .work-card__title {
   transform: translateX(4px);
 }
 
-.work-card:hover .work-card__arrow {
+a.work-card[href]:hover .work-card__arrow {
   opacity: 1;
   transform: translate(4px, -50%);
 }
 
 /* bendersej-style dark tag inversion on hover */
-.work-card:hover .work-tag {
+a.work-card[href]:hover .work-tag {
   border-color: #2f2f2f;
   color: #ffffff;
   background: #2f2f2f;
