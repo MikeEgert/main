@@ -710,6 +710,191 @@ a.work-card[href]:hover .work-tag {
   color: var(--fg);
 }
 
+/* --- contact form (dossier card, matches the hero) --- */
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: clamp(24px, 4vw, 40px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03),
+    0 10px 28px -10px rgba(0, 0, 0, 0.05);
+}
+
+.contact-form__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 22px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-form__title {
+  font-size: clamp(22px, 3vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  color: var(--fg);
+}
+
+.contact-form__desc {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--sub);
+  margin-top: 6px;
+  max-width: 46ch;
+}
+
+.contact-form__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  font-family: var(--mono);
+  padding-top: 4px;
+}
+
+.contact-form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.field label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.field__num {
+  color: var(--fg);
+  opacity: 0.32;
+}
+
+.field input,
+.field textarea {
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 13px 15px;
+  width: 100%;
+  transition: border-color 0.2s ease, background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 130px;
+  line-height: 1.55;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.65;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: #c8c7c2;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--fg);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(20, 20, 19, 0.06);
+}
+
+.field input:user-invalid,
+.field textarea:user-invalid {
+  border-color: var(--email-accent);
+}
+
+.contact-form__actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.contact-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background: var(--card);
+  border: 1px solid var(--fg);
+  border-radius: 6px;
+  padding: 14px 34px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease,
+    box-shadow 0.2s ease, transform 0.2s var(--ease);
+}
+
+.contact-submit::after {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: url("img/right.png") no-repeat center / contain;
+  mask: url("img/right.png") no-repeat center / contain;
+  transition: transform 0.2s var(--ease);
+}
+
+.contact-submit:hover,
+.contact-submit:focus-visible {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.contact-submit:hover::after {
+  transform: translateX(4px);
+}
+
+.contact-form__note {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.contact-direct {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 40px;
+}
+
 /* Return link */
 .back-link {
   display: inline-flex;
@@ -790,6 +975,15 @@ a.work-card[href]:hover .work-tag {
     align-items: flex-start;
     gap: 4px;
   }
+
+  .contact-form__row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form__meta {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -807,6 +1001,10 @@ a.work-card[href]:hover .work-tag {
   .work-tag,
   .contact-row,
   .contact-pill,
+  .contact-submit,
+  .contact-submit::after,
+  .field input,
+  .field textarea,
   .back-link,
   .back-link__arrow { transition: none; }
   .dot::after { animation: none; }

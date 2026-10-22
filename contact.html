@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — megert</title>
+  <meta name="description" content="Get in touch with megert — Software &amp; Engineering based in Estonia.">
+  <link rel="canonical" href="https://mikkmaide.com/contact.html">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="megert">
+  <meta property="og:url" content="https://mikkmaide.com/contact.html">
+  <meta property="og:title" content="Contact — megert">
+  <meta property="og:description" content="Get in touch with megert — Software &amp; Engineering based in Estonia.">
+  <meta property="og:image" content="https://mikkmaide.com/img/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact — megert">
+  <meta name="twitter:description" content="Get in touch with megert — Software &amp; Engineering based in Estonia.">
+  <meta name="twitter:image" content="https://mikkmaide.com/img/og-image.png">
+
+  <link rel="stylesheet" href="style.css?v=20261022-1">
+  <script>document.documentElement.className += " js";</script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="site-logo" href="index.html">megert</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="home.html#projects">Work</a>
+        <a href="home.html#work">Experience</a>
+        <a href="home.html#about">Interests</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="section reveal" id="contact">
+      <div class="container">
+        <div class="section-head">
+          <h3 class="section-header">Contact</h3>
+          <p class="section-note">Open for collaborations &amp; inquiries</p>
+        </div>
+
+        <form class="contact-form" data-mailto="maidemikkegert@gmail.com" novalidate>
+          <div class="contact-form__head">
+            <div class="contact-form__heading">
+              <h4 class="contact-form__title">Send a message</h4>
+              <p class="contact-form__desc">Contact me via the form listed right below!</p>
+            </div>
+            <div class="contact-form__meta">
+              <span class="meta-value">Open</span>
+              <span class="meta-clock"><span id="clock">00:00:00</span> EET</span>
+            </div>
+          </div>
+
+          <div class="contact-form__row">
+            <div class="field">
+              <label for="cf-name"><span class="field__num">01</span> Name</label>
+              <input id="cf-name" name="name" type="text" autocomplete="name" placeholder="Your name" required>
+            </div>
+
+            <div class="field">
+              <label for="cf-email"><span class="field__num">02</span> Email</label>
+              <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cf-subject"><span class="field__num">03</span> Subject</label>
+            <input id="cf-subject" name="subject" type="text" placeholder="What is this about?" required>
+          </div>
+
+          <div class="field">
+            <label for="cf-message"><span class="field__num">04</span> Message</label>
+            <textarea id="cf-message" name="message" rows="6" placeholder="Write your message..." required></textarea>
+          </div>
+
+          <div class="contact-form__actions">
+            <button class="contact-submit" type="submit">Send message</button>
+            <p class="contact-form__note" data-form-note role="status" aria-live="polite"></p>
+          </div>
+        </form>
+
+        <div class="contact-direct">
+          <span class="meta">Or reach me directly</span>
+          <div class="contact-list">
+            <a class="contact-row contact-row--email" href="mailto:maidemikkegert@gmail.com">
+              <span class="contact-row__label">Email</span>
+              <span class="contact-row__value">maidemikkegert@gmail.com <img class="contact-row__arrow" src="img/right.png" alt="" aria-hidden="true"></span>
+            </a>
+            <a class="contact-row contact-row--github" href="https://github.com/MikeEgert" target="_blank" rel="noopener">
+              <span class="contact-row__label">GitHub</span>
+              <span class="contact-row__value">github.com/MikeEgert <img class="contact-row__arrow" src="img/right.png" alt="" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+
+        <a class="back-link" href="home.html">
+          <img class="back-link__arrow" src="img/right.png" alt="" aria-hidden="true">
+          <span>Back to home</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span class="meta">© 2026 megert</span>
+      <span class="meta">All rights reserved</span>
+    </div>
+  </footer>
+
+  <script src="main.js?v=20261022-1"></script>
+</body>
+</html>
