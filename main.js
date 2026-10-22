@@ -62,6 +62,68 @@
   });
 })();
 
+// Contact: POST the form to the backend, with a mailto fallback
+(function () {
+  var form = document.querySelector(".contact-form");
+  if (!form) return;
+
+  var note = form.querySelector("[data-form-note]");
+  var submit = form.querySelector(".contact-submit");
+  var address = form.getAttribute("data-mailto");
+
+  function openMailApp(data) {
+    var body = data.message + "\n\n— " + data.name + " (" + data.email + ")";
+    window.location.href = "mailto:" + address +
+      "?subject=" + encodeURIComponent(data.subject) +
+      "&body=" + encodeURIComponent(body);
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var data = {
+      name: form.elements.name.value.trim(),
+      email: form.elements.email.value.trim(),
+      subject: form.elements.subject.value.trim(),
+      message: form.elements.message.value.trim()
+    };
+
+    if (!data.name || !data.email || !data.subject || !data.message) {
+      if (note) note.textContent = "Please fill in every field before sending.";
+      return;
+    }
+
+    if (note) note.textContent = "Sending...";
+    if (submit) submit.disabled = true;
+
+    fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+      .then(function (res) {
+        return res.json().then(function (json) {
+          return { ok: res.ok, json: json };
+        });
+      })
+      .then(function (r) {
+        if (r.ok && r.json.ok) {
+          if (note) note.textContent = "Thanks — your message is on its way.";
+          form.reset();
+        } else {
+          if (note) note.textContent = (r.json && r.json.error) || "Something went wrong.";
+        }
+      })
+      .catch(function () {
+        if (note) note.textContent = "Server unreachable — opening your email app instead...";
+        openMailApp(data);
+      })
+      .finally(function () {
+        if (submit) submit.disabled = false;
+      });
+  });
+})();
+
 // Home: reveal sections as they scroll into view
 (function () {
   var items = document.querySelectorAll(".reveal");
