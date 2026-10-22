@@ -1,0 +1,17 @@
+{
+  "name": "megert-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "megert portfolio site with an Express backend for the contact form",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "nodemailer": "^10.2.1"
+  }
+}
