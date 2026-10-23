@@ -24,8 +24,8 @@
   <meta name="twitter:description" content="Get in touch with megert — Software &amp; Engineering based in Estonia.">
   <meta name="twitter:image" content="https://mikkmaide.com/img/og-image.png">
 
-  <link rel="stylesheet" href="style.css?v=20261022-1">
-  <script>document.documentElement.className += " js";</script>
+  <link rel="stylesheet" href="style.css?v=20261023-1">
+  <script src="js-flag.js"></script>
 </head>
 <body>
 
@@ -56,7 +56,7 @@
           <div class="contact-form__head">
             <div class="contact-form__heading">
               <h4 class="contact-form__title">Send a message</h4>
-              <p class="contact-form__desc">Contact me via the form listed right below!</p>
+              <p class="contact-form__desc">Contact me using the form below.</p>
             </div>
             <div class="contact-form__meta">
               <span class="meta-value">Open</span>
@@ -86,11 +86,18 @@
             <textarea id="cf-message" name="message" rows="6" placeholder="Write your message..." required></textarea>
           </div>
 
+          <div class="hp-field" aria-hidden="true">
+            <label for="cf-website">Website</label>
+            <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
           <div class="contact-form__actions">
             <button class="contact-submit" type="submit">Send message</button>
             <p class="contact-form__note" data-form-note role="status" aria-live="polite"></p>
           </div>
         </form>
+
+        <p class="contact-privacy">Your name, email, and message are used only to reply to you. Messages are delivered through Gmail and are not stored on this site. They are deleted once the conversation ends.</p>
 
         <div class="contact-direct">
           <span class="meta">Or reach me directly</span>
@@ -122,6 +129,6 @@
     </div>
   </footer>
 
-  <script src="main.js?v=20261022-1"></script>
+  <script src="main.js?v=20261023-1"></script>
 </body>
 </html>

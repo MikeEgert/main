@@ -8,12 +8,23 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 const PORT = process.env.PORT || 8000;
+const IS_PROD = process.env.NODE_ENV === "production";
+
+app.disable("x-powered-by");
+app.set("trust proxy", Number(process.env.TRUST_PROXY || 1));
 
 const MAIL_USER = process.env.GMAIL_USER;
 const MAIL_PASS = process.env.GMAIL_APP_PASSWORD;
 const MAIL_TO = process.env.CONTACT_TO || MAIL_USER;
-const DRY_RUN =
-  process.env.MAIL_DRY_RUN === "true" || !MAIL_USER || !MAIL_PASS;
+const MISSING_MAIL = !MAIL_USER || !MAIL_PASS;
+const DRY_RUN = process.env.MAIL_DRY_RUN === "true" || MISSING_MAIL;
+
+if (IS_PROD && MISSING_MAIL && process.env.MAIL_DRY_RUN !== "true") {
+  console.error(
+    "Missing GMAIL_USER / GMAIL_APP_PASSWORD in production. Refusing to start."
+  );
+  process.exit(1);
+}
 
 const transporter = DRY_RUN
   ? null
@@ -22,25 +33,55 @@ const transporter = DRY_RUN
       auth: { user: MAIL_USER, pass: MAIL_PASS },
     });
 
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader(
+    "Permissions-Policy",
+    "camera=(), microphone=(), geolocation=()"
+  );
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; form-action 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'"
+  );
+  if (IS_PROD) {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains"
+    );
+  }
+  next();
+});
+
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: false, limit: "20kb" }));
 
+const RATE_WINDOW_MS = 15 * 60 * 1000;
+const RATE_MAX = 5;
 const hits = new Map();
+
+const sweeper = setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of hits) {
+    if (now - entry.start > RATE_WINDOW_MS) hits.delete(ip);
+  }
+}, RATE_WINDOW_MS);
+sweeper.unref();
+
 function rateLimit(req, res, next) {
   const ip = req.ip;
   const now = Date.now();
-  const windowMs = 15 * 60 * 1000;
-  const max = 5;
 
   const entry = hits.get(ip) || { count: 0, start: now };
-  if (now - entry.start > windowMs) {
+  if (now - entry.start > RATE_WINDOW_MS) {
     entry.count = 0;
     entry.start = now;
   }
   entry.count += 1;
   hits.set(ip, entry);
 
-  if (entry.count > max) {
+  if (entry.count > RATE_MAX) {
     return res.status(429).json({
       ok: false,
       error: "Too many messages from this address. Please try again later.",
@@ -51,6 +92,13 @@ function rateLimit(req, res, next) {
 
 function clean(value, max) {
   return String(value ?? "").trim().slice(0, max);
+}
+
+function cleanLine(value, max) {
+  return String(value ?? "")
+    .replace(/[\r\n]+/g, " ")
+    .trim()
+    .slice(0, max);
 }
 
 function isEmail(value) {
@@ -67,9 +115,13 @@ function escapeHtml(value) {
 }
 
 app.post("/api/contact", rateLimit, async (req, res) => {
-  const name = clean(req.body.name, 100);
-  const email = clean(req.body.email, 200);
-  const subject = clean(req.body.subject, 150);
+  if (req.body.website) {
+    return res.json({ ok: true });
+  }
+
+  const name = cleanLine(req.body.name, 100);
+  const email = cleanLine(req.body.email, 200);
+  const subject = cleanLine(req.body.subject, 150);
   const message = clean(req.body.message, 5000);
 
   if (!name || !email || !subject || !message) {
@@ -136,7 +188,24 @@ app.use((req, res, next) => {
   }
   next();
 });
-app.use(express.static(__dirname, { extensions: ["html"] }));
+app.use(
+  express.static(__dirname, {
+    extensions: ["html"],
+    setHeaders(res, filePath) {
+      if (filePath.endsWith(".html")) {
+        res.setHeader("Cache-Control", "no-cache");
+      } else if (/\.(woff2|png|svg)$/.test(filePath)) {
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+      } else if (/\.(css|js)$/.test(filePath)) {
+        res.setHeader("Cache-Control", "public, max-age=86400");
+      }
+    },
+  })
+);
+
+app.use((req, res) => {
+  res.status(404).type("text/plain").send("Not found");
+});
 
 app.listen(PORT, () => {
   console.log(`megert running at http://localhost:${PORT}`);

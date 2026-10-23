@@ -32,7 +32,7 @@
   --card: #ffffff;
   --fg: #141413;
   --sub: #484846;
-  --muted: #737370;
+  --muted: #6b6b68;
   --surface: #fafaf8;
   --line: #e4e4e0;
   --line-strong: #141413;
@@ -885,6 +885,22 @@ a.work-card[href]:hover .work-tag {
 .contact-form__note {
   font-family: var(--mono);
   font-size: 12px;
+  color: var(--muted);
+}
+
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.contact-privacy {
+  max-width: 62ch;
+  margin-top: 18px;
+  font-size: 12px;
+  line-height: 1.6;
   color: var(--muted);
 }
 

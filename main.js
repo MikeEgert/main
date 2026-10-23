@@ -85,7 +85,8 @@
       name: form.elements.name.value.trim(),
       email: form.elements.email.value.trim(),
       subject: form.elements.subject.value.trim(),
-      message: form.elements.message.value.trim()
+      message: form.elements.message.value.trim(),
+      website: form.elements.website ? form.elements.website.value : ""
     };
 
     if (!data.name || !data.email || !data.subject || !data.message) {
