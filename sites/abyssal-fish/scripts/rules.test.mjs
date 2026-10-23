@@ -1,0 +1,9 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {initialState,SPECIES,LEVELS,eat,grow,equip,restore,canEat} from '../dist/rules.js';
+test('new fish can eat only prey strictly smaller than itself',()=>{const s=initialState();assert.deepEqual(SPECIES.filter(p=>canEat(s.level,p)).map(p=>p.id),['plankton','shrimp']);for(const p of SPECIES.slice(2))assert.equal(eat(s,p.id),s);assert.equal(canEat(0,{size:1}),false);});
+test('catch rewards and spending cannot overdraw or double spend',()=>{let s=initialState();assert.equal(grow(s),s);for(let i=0;i<8;i++)s=eat(s,'plankton');assert.equal(s.points,40);assert.equal(s.eaten,8);s=grow(s);assert.equal(s.level,1);assert.equal(s.points,0);assert.equal(grow(s),s);assert.equal(eat(s,'sardine').points,20);});
+test('hat purchase charges once; equipping is free and cosmetic',()=>{let s={...initialState(),points:150};s=equip(s,'sailor');assert.equal(s.points,50);assert.equal(s.level,0);s=equip(s,'none');s=equip(s,'sailor');assert.equal(s.points,50);assert.equal(equip(s,'crown'),s);assert.equal(equip(s,'unknown'),s);});
+test('maximum growth is stable',()=>{const s={...initialState(),level:LEVELS.length-1,points:1000};assert.equal(grow(s),s);assert.ok(SPECIES.every(p=>canEat(s.level,p)));});
+test('corrupt or hostile save values are sanitized',()=>{for(const raw of ['{','null','[]','{}'])assert.deepEqual(restore(raw),initialState());const s=restore(JSON.stringify({version:1,points:-100,level:99,eaten:'1',owned:['crown','bad','crown'],hat:'bad'}));assert.equal(s.points,0);assert.equal(s.level,0);assert.equal(s.hat,'none');assert.deepEqual(s.owned,['none','crown']);});
+test('saved progression round trips',()=>{const s={...initialState(),points:500,level:3,hat:'beanie',owned:['none','beanie']};assert.deepEqual(restore(JSON.stringify(s)),s);});

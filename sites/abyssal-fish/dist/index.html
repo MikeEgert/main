@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="favicon.svg" type="image/svg+xml"><title>Abyssal — A little fish. A big ocean.</title><meta name="description" content="Meet Goldeneye. Swim, catch smaller ocean creatures, grow, and make the ocean your own."><link rel="stylesheet" href="ocean.css"><script type="module" src="ocean.js"></script></head>
+<body>
+<header class="topbar"><a href="https://mikkmaide.com/" class="brand" aria-label="Back to landing page"><span class="brand-eye">◉</span> ABYSSAL<span class="brand-sub">an ocean playground</span></a><nav><button id="model-button">Explore the model <span>↗</span></button><a href="goldeneye.glb" download>Download .glb ↓</a><a href="https://mikkmaide.com/" class="back">Back to megert ↗</a></nav></header>
+<main>
+<section class="ocean" aria-label="Interactive ocean game"><canvas id="ocean" tabindex="0" aria-label="Click the fish to begin. Use arrow keys or WASD to swim; move the pointer or drag to steer. Eat smaller creatures by touching them."></canvas><div class="ocean-top"><span class="eyebrow"><i></i> THE OPEN OCEAN</span><span class="coordinates">36° N &nbsp; / &nbsp; 140° E</span></div>
+<div class="intro" id="intro"><span class="eyebrow">SMALL FISH. BIG POSSIBILITIES.</span><h1>A little fish.<br>A big <em>ocean.</em></h1><p>Start small. Follow your appetite.<br>There’s a whole world to grow into.</p><button class="primary" id="start" disabled>Loading the ocean…</button><span class="intro-note">Click Goldeneye or dive in. Just keep swimming.</span></div>
+<div class="play-hud" id="play-hud" hidden><span class="pill">◉ <b id="hud-points">0</b> pearls</span><button id="pause" class="round" aria-label="Pause game">Ⅱ</button></div>
+<div class="center-message" id="paused" hidden><span class="eyebrow">TAKE A BREATHER</span><h2>Ocean on pause.</h2><button id="resume" class="primary">Keep swimming →</button></div>
+<div class="model-caption" id="model-caption" hidden><span class="eyebrow">MEET GOLDENEYE</span><h2>Made to move.</h2><p>Drag to rotate · Scroll to zoom<br>Separate fins. A looping swim animation.<br>One curious little fish.</p><button id="return" class="primary">Return to ocean →</button></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div class="ocean-bottom"><span id="controls">MOVE YOUR POINTER TO SWIM <span class="key">W A S D</span> <span class="key">↑ ← ↓ →</span></span><span>SHALLOWS <b>● ● ○ ○ ○</b></span></div>
+<div id="fallback" class="center-message" hidden><h2>This ocean needs WebGL 2.</h2><p>Try a browser with hardware acceleration enabled.<br>You can still download the animated 3D model above.</p></div>
+</section>
+<aside>
+<div class="sidebar-heading"><span class="eyebrow">YOUR LITTLE ADVENTURER</span><span class="live-dot">●</span></div>
+<h2>Goldeneye<span>↗</span></h2><p class="muted">A curious soul with a very big appetite.</p>
+<div class="stats"><div><span class="label">PEARLS</span><strong id="points">0<span>◉</span></strong></div><div><span class="label">SIZE</span><strong><span id="size">1.0</span><small>×</small></strong></div></div>
+<div class="growth"><div class="spread"><span id="level">Little drifter</span><span class="muted" id="level-number">01 / 05</span></div><progress id="growth-progress" max="40" value="0" aria-label="Pearls toward next growth upgrade"></progress><div class="spread small muted"><span id="growth-description">Your next chapter is a little bigger.</span><span id="growth-cost">0 / 40</span></div><button id="grow" class="grow" disabled>Grow bigger <span>40 ◉</span></button></div>
+<div class="tabs" role="tablist" aria-label="Fish information"><button id="food-tab" role="tab" aria-selected="true" aria-controls="food-panel">On the menu</button><button id="hat-tab" role="tab" aria-selected="false" aria-controls="hat-panel" tabindex="-1">The hat shop</button></div>
+<div id="food-panel" role="tabpanel" aria-labelledby="food-tab"><p class="panel-note">Little bites now. Bigger adventures later.</p><div id="prey-list"></div><div class="legend"><span><i class="edible-dot"></i> Smaller than you</span><span>⌑ Grow to unlock</span></div></div>
+<div id="hat-panel" role="tabpanel" aria-labelledby="hat-tab" hidden><p class="panel-note">A little personality for your next swim.</p><div id="hat-list"></div><p class="panel-note">Hats are cosmetic. Your appetite stays the same.</p></div>
+<div class="journey"><span class="label">THE JOURNEY SO FAR</span><div><b id="eaten">0</b> creatures caught <span id="save-status">Saved on this device</span></div></div>
+</aside>
+</main><footer><span>TAKE YOUR TIME. FIND YOUR CURRENT.</span><span>Original character · 3D ocean experiment <span class="footer-star">✳</span></span></footer>
+<noscript><p class="noscript">JavaScript is needed to play. The .glb model is available using the download link above.</p></noscript>
+</body></html>

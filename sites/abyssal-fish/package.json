@@ -1,0 +1,19 @@
+{
+  "name": "abyssal-fish",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test scripts/rules.test.mjs scripts/model.test.mjs",
+    "export": "node scripts/export-model.mjs",
+    "sync": "node scripts/sync-page.mjs",
+    "test:browser": "node scripts/browser-check.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.56.1"
+  }
+}
