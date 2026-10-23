@@ -213,6 +213,28 @@ a {
   transition: transform 0.2s var(--ease);
 }
 
+.landing-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 56px;
+}
+
+.landing-actions .enter {
+  margin-top: 0;
+}
+
+.enter-ocean {
+  background: #141f26;
+  border-color: #141f26;
+  color: #f1d270;
+}
+
+.enter-ocean[hidden] {
+  display: none;
+}
+
 .enter:hover,
 .enter:focus-visible {
   background: var(--accent);
