@@ -177,6 +177,11 @@ app.post("/api/contact", rateLimit, async (req, res) => {
   }
 });
 
+app.get("/api/health", (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.json({ ok: true, uptime: process.uptime(), version: "1.0.0" });
+});
+
 const BLOCKED = new Set(["/server.js", "/package.json", "/package-lock.json"]);
 app.use((req, res, next) => {
   if (
@@ -207,7 +212,7 @@ app.use((req, res) => {
   res.status(404).type("text/plain").send("Not found");
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`megert running at http://localhost:${PORT}`);
   if (DRY_RUN) {
     console.log(
@@ -216,3 +221,32 @@ app.listen(PORT, () => {
     );
   }
 });
+
+let shuttingDown = false;
+
+function shutdown(signal) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log(`${signal} received — shutting down.`);
+
+  const forceExit = setTimeout(() => {
+    console.warn("Shutdown timed out after 10s — forcing exit.");
+    server.closeAllConnections();
+    process.exit(1);
+  }, 10_000);
+  forceExit.unref();
+
+  server.close((err) => {
+    if (err) {
+      console.error("Error while closing server:", err);
+      process.exit(1);
+    }
+    console.log("Server closed cleanly.");
+    process.exit(0);
+  });
+
+  server.closeIdleConnections();
+}
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
