@@ -233,7 +233,7 @@ function shutdown(signal) {
     console.warn("Shutdown timed out after 10s — forcing exit.");
     server.closeAllConnections();
     process.exit(1);
-  }, 10_000);
+  }, 10000);
   forceExit.unref();
 
   server.close((err) => {
