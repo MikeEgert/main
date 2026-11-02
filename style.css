@@ -156,6 +156,10 @@ a {
   padding-bottom: var(--pad);
 }
 
+.landing-top {
+  justify-content: flex-end;
+}
+
 .landing-center {
   text-align: center;
   padding: 0 var(--pad);
