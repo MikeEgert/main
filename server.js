@@ -11,7 +11,20 @@ const PORT = process.env.PORT || 8000;
 const IS_PROD = process.env.NODE_ENV === "production";
 
 app.disable("x-powered-by");
-app.set("trust proxy", Number(process.env.TRUST_PROXY || 1));
+
+function parseTrustProxy(value) {
+  if (value === undefined || value === "") return 1;
+  if (value === "true") {
+    throw new Error(
+      'TRUST_PROXY cannot be "true". Use 1, false, loopback, or proxy IPs.'
+    );
+  }
+  if (/^\d+$/.test(value)) return Number(value);
+  if (value === "false") return false;
+  return value;
+}
+
+app.set("trust proxy", parseTrustProxy(process.env.TRUST_PROXY));
 
 const MAIL_USER = process.env.GMAIL_USER;
 const MAIL_PASS = process.env.GMAIL_APP_PASSWORD;
@@ -59,6 +72,7 @@ app.use(express.urlencoded({ extended: false, limit: "20kb" }));
 
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_MAX = 5;
+const MAX_TRACKED_IPS = 10000;
 const hits = new Map();
 
 const sweeper = setInterval(() => {
@@ -72,6 +86,10 @@ sweeper.unref();
 function rateLimit(req, res, next) {
   const ip = req.ip;
   const now = Date.now();
+
+  if (!hits.has(ip) && hits.size >= MAX_TRACKED_IPS) {
+    hits.delete(hits.keys().next().value);
+  }
 
   const entry = hits.get(ip) || { count: 0, start: now };
   if (now - entry.start > RATE_WINDOW_MS) {
