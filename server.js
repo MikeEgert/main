@@ -202,14 +202,44 @@ function sendNotFound(req, res) {
   sendErrorPage(req, res, 404, "404.html");
 }
 
-const BLOCKED = new Set(["/server.js", "/package.json", "/package-lock.json"]);
+const PUBLIC_FILES = new Set([
+  "/",
+  "/index.html",
+  "/home.html",
+  "/contact.html",
+  "/ocean.html",
+  "/style.css",
+  "/main.js",
+  "/js-flag.js",
+  "/structured-data.js",
+  "/favicon.svg",
+  "/apple-touch-icon.png",
+  "/og-image.svg",
+  "/robots.txt",
+  "/sitemap.xml",
+]);
+const PUBLIC_DIRS = ["/fonts/", "/img/", "/sites/abyssal-fish/dist/"];
+
+function isPublicPath(pathname) {
+  return (
+    PUBLIC_FILES.has(pathname) ||
+    PUBLIC_FILES.has(pathname + ".html") ||
+    PUBLIC_DIRS.some((dir) => pathname.startsWith(dir))
+  );
+}
+
 app.use((req, res, next) => {
-  if (
-    BLOCKED.has(req.path) ||
-    req.path.startsWith("/node_modules/") ||
-    req.path.startsWith("/.")
-  ) {
-    return res.status(404).type("text/plain").send("Not found");
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+
+  let pathname;
+  try {
+    pathname = path.posix.normalize(decodeURIComponent(req.path));
+  } catch {
+    return res.status(400).type("text/plain").send("Bad request");
+  }
+
+  if (pathname.includes("\0") || !isPublicPath(pathname)) {
+    return sendNotFound(req, res);
   }
   next();
 });
