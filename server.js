@@ -182,6 +182,26 @@ app.get("/api/health", (req, res) => {
   res.json({ ok: true, uptime: process.uptime(), version: "1.0.0" });
 });
 
+function sendErrorPage(req, res, status, file) {
+  res.setHeader("Cache-Control", "no-store");
+  if (req.path.startsWith("/api/")) {
+    return res.status(status).json({
+      ok: false,
+      error: status === 404 ? "Not found" : "Something went wrong.",
+    });
+  }
+  if (req.method === "GET" || req.method === "HEAD") {
+    return res
+      .status(status)
+      .sendFile(path.join(__dirname, file), { cacheControl: false });
+  }
+  return res.status(status).type("text/plain").send("Error");
+}
+
+function sendNotFound(req, res) {
+  sendErrorPage(req, res, 404, "404.html");
+}
+
 const BLOCKED = new Set(["/server.js", "/package.json", "/package-lock.json"]);
 app.use((req, res, next) => {
   if (
@@ -208,8 +228,20 @@ app.use(
   })
 );
 
-app.use((req, res) => {
-  res.status(404).type("text/plain").send("Not found");
+app.use(sendNotFound);
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) return next(err);
+  const status = err.status || err.statusCode || 500;
+  console.error("Request failed:", status);
+  if (status >= 500) {
+    return sendErrorPage(req, res, 500, "500.html");
+  }
+  res.setHeader("Cache-Control", "no-store");
+  if (req.path.startsWith("/api/")) {
+    return res.status(status).json({ ok: false, error: "Bad request." });
+  }
+  res.status(status).type("text/plain").send("Bad request");
 });
 
 const server = app.listen(PORT, "0.0.0.0", () => {
