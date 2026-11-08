@@ -68,7 +68,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: "20kb" }));
-app.use(express.urlencoded({ extended: false, limit: "20kb" }));
 
 const RATE_WINDOW_MS = 15 * 60 * 1000;
 const RATE_MAX = 5;
@@ -108,6 +107,16 @@ function rateLimit(req, res, next) {
   next();
 }
 
+function requireJson(req, res, next) {
+  if (!req.is("application/json")) {
+    return res.status(415).json({
+      ok: false,
+      error: "Content-Type must be application/json.",
+    });
+  }
+  next();
+}
+
 function clean(value, max) {
   return String(value ?? "").trim().slice(0, max);
 }
@@ -132,7 +141,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-app.post("/api/contact", rateLimit, async (req, res) => {
+app.post("/api/contact", requireJson, rateLimit, async (req, res) => {
   if (req.body.website) {
     return res.json({ ok: true });
   }
