@@ -107,6 +107,25 @@ function rateLimit(req, res, next) {
   next();
 }
 
+function sameOriginOnly(req, res, next) {
+  const fetchSite = req.get("Sec-Fetch-Site");
+  if (fetchSite && fetchSite !== "same-origin" && fetchSite !== "none") {
+    return res.status(403).json({
+      ok: false,
+      error: "Cross-site requests are not allowed.",
+    });
+  }
+
+  const origin = req.get("Origin");
+  if (origin && origin !== `${req.protocol}://${req.get("Host")}`) {
+    return res.status(403).json({
+      ok: false,
+      error: "Cross-site requests are not allowed.",
+    });
+  }
+  next();
+}
+
 function requireJson(req, res, next) {
   if (!req.is("application/json")) {
     return res.status(415).json({
@@ -141,7 +160,7 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-app.post("/api/contact", requireJson, rateLimit, async (req, res) => {
+app.post("/api/contact", sameOriginOnly, requireJson, rateLimit, async (req, res) => {
   if (req.body.website) {
     return res.json({ ok: true });
   }
