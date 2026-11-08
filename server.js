@@ -13,7 +13,7 @@ const IS_PROD = process.env.NODE_ENV === "production";
 app.disable("x-powered-by");
 
 function parseTrustProxy(value) {
-  if (value === undefined || value === "") return 1;
+  if (value === undefined || value === "") return false;
   if (value === "true") {
     throw new Error(
       'TRUST_PROXY cannot be "true". Use 1, false, loopback, or proxy IPs.'
